@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% block content %}
+<div class="game_content d-flex">
+	<h3 class="mb-5">{{question}}</h3>
+	<form action="." method="get" class="game-form">
+		{% csrf_token %}
+		<input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off" />
+		<label class="btn btn-outline-success" for="btn-check-outlined">rude questions</label><br />
+		<button class="btn btn-primary p-0 my-2" type="submit" name="Dare">Dare</button>
+		<button class="btn btn-primary p-0 my-2" type="submit" name="Truth">Truth</button>
+	</form>
+	{% if question %}
+	<form action="" class="like-form" method="post">
+		{% csrf_token %}
+		<button class="btn btn-success p-0 m-0" type="button" id="btn-like">like</button>
+		<button class="btn btn-danger p-0 m-0" type="button" id="btn-dislike">dislike</button>
+		
+	</form>
+	{% endif %}
+</div>
+{% endblock content %} {% block javascript %}
+
+<script>
+	let like_button = document.querySelector("#btn-like");
+	let dislike_button = document.querySelector("#btn-dislike");
+
+	like_button.addEventListener("click", (e) => {
+		if (true) {
+	           {% if question %}
+			url = "{% url 'question:like_question' question.pk %}";
+	           {% endif %}
+	           console.log("hello");
+			fetch(url, {
+				method: "Post",
+				headers: {
+					"x-CSRFToken": getCSRFToken(),
+					"X-Requested-With": "XMLHttpRequest",
+				},
+			}).then(function (response) {
+				return response.json();
+			});
+		}
+	});
+
+	function getCSRFToken() {
+		var cookieValue = null;
+		if (document.cookie && document.cookie != "") {
+			var cookies = document.cookie.split(";");
+			for (var i = 0; i < cookies.length; i++) {
+				var cookie = jQuery.trim(cookies[i]);
+				if (cookie.substring(0, 10) == "csrftoken" + "=") {
+					cookieValue = decodeURIComponent(cookie.substring(10));
+					break;
+				}
+			}
+		}
+		return cookieValue;
+	}
+</script>
+
+{% endblock javascript %}
